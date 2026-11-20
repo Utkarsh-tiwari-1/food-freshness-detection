@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f5ec" />
+    <meta name="description" content="Analyze visible food freshness and get an illustrative, temperature-aware quality-window estimate." />
+    <title>Freshkeep — Food freshness, at a glance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Freshkeep home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>freshkeep</span>
+      </a>
+      <a class="header-link" href="#how-it-works">How it works <span aria-hidden="true">↘</span></a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>SMARTER FOOD STORAGE</div>
+          <h1>Freshness you can<br /><em>see</em>. Waste you can<br />prevent.</h1>
+          <p class="hero-description">Take a photo of your food. Get a quick visual freshness estimate with storage temperature in the picture.</p>
+          <div class="trust-line"><span class="sparkle">✳</span> Powered by computer vision <span class="trust-divider">·</span> Made for everyday kitchens</div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+          <div class="produce produce-orange"><i></i></div>
+          <div class="produce produce-lemon"><i></i></div>
+          <div class="produce produce-avocado"><i></i><b></b></div>
+          <div class="leaf leaf-one"></div><div class="leaf leaf-two"></div><div class="leaf leaf-three"></div>
+          <div class="art-badge"><span class="badge-dot"></span> Fresh, at a glance</div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Freshness analyzer">
+        <div class="workspace-heading">
+          <div><div class="section-kicker">THE FRESHNESS CHECK</div><h2>What’s in your kitchen?</h2></div>
+          <div class="model-status" id="model-status"><span class="status-dot"></span><span>Checking model…</span></div>
+        </div>
+
+        <div class="analyzer-grid">
+          <form class="analyzer-card" id="analyzer-form">
+            <div class="upload-area" id="drop-area" role="button" tabindex="0" aria-label="Choose an image or take a photo">
+              <input id="image-input" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" hidden />
+              <div class="upload-empty" id="upload-empty">
+                <div class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <strong>Drop a photo here</strong>
+                <span>or <span class="browse-link">browse files</span> / use your camera</span>
+                <small>JPG, PNG or WEBP · up to 12 MB</small>
+              </div>
+              <div class="preview-wrap" id="preview-wrap" hidden>
+                <img id="image-preview" alt="Selected food" />
+                <button type="button" class="change-photo" id="change-photo">Change photo</button>
+              </div>
+            </div>
+
+            <div class="form-fields">
+              <label class="field-label" for="food-type">Food category</label>
+              <div class="select-wrap"><select id="food-type" name="food_type">
+                <option value="produce">Fruit &amp; vegetables</option>
+                <option value="dairy">Dairy</option>
+                <option value="meat">Meat</option>
+                <option value="seafood">Seafood</option>
+                <option value="bakery">Bakery</option>
+                <option value="leftovers">Leftovers</option>
+                <option value="other">Other</option>
+              </select><span class="select-chevron" aria-hidden="true">⌄</span></div>
+
+              <div class="temperature-heading"><label class="field-label" for="temperature">Storage temperature</label><span class="temperature-value"><span id="temperature-value">4</span>°C</span></div>
+              <input class="temperature-slider" id="temperature" name="temperature_c" type="range" min="0" max="35" step="1" value="4" />
+              <div class="slider-ends"><span>0°C · colder</span><span>35°C · warmer</span></div>
+              <div class="temperature-hint"><span aria-hidden="true">ⓘ</span> Use the temperature where the food has been stored.</div>
+
+              <button class="analyze-button" id="analyze-button" type="submit" disabled><span>Analyze freshness</span><span class="button-arrow" aria-hidden="true">↗</span></button>
+              <p class="form-error" id="form-error" role="alert" hidden></p>
+            </div>
+          </form>
+
+          <aside class="result-panel" id="result-panel" aria-live="polite">
+            <div class="result-empty" id="result-empty">
+              <div class="result-illustration" aria-hidden="true"><div class="result-ring"><span>✳</span></div><i class="mini-leaf leaf-a"></i><i class="mini-leaf leaf-b"></i></div>
+              <div class="result-kicker">YOUR RESULT, RIGHT HERE</div>
+              <h3>A little clarity<br />goes a long way.</h3>
+              <p>Your freshness reading and temperature-aware estimate will appear here.</p>
+              <div class="result-steps"><span><b>01</b> Add a photo</span><span><b>02</b> Set storage temp</span><span><b>03</b> Get your estimate</span></div>
+            </div>
+            <div class="result-content" id="result-content" hidden></div>
+          </aside>
+        </div>
+        <div class="safety-note"><span class="safety-icon" aria-hidden="true">!</span><p><strong>Helpful, not a safety test.</strong> A photo can’t detect harmful bacteria or replace date labels and safe food handling. When in doubt, follow <a href="https://www.fda.gov/food/buy-store-serve-safe-food/refrigerator-thermometers-cold-facts-about-food-safety" target="_blank" rel="noreferrer">FDA food-safety guidance</a>.</p></div>
+      </section>
+
+      <section class="how-section" id="how-it-works">
+        <div class="how-intro"><div class="section-kicker">A SMALL HABIT, A BIG DIFFERENCE</div><h2>Know what’s fresh.<br /><em>Use what you have.</em></h2></div>
+        <div class="how-cards">
+          <article class="how-card"><div class="how-number">01</div><div class="how-icon icon-photo" aria-hidden="true">▧</div><h3>Snap a photo</h3><p>Upload a close, well-lit image of one food item for a clearer visual read.</p></article>
+          <article class="how-card"><div class="how-number">02</div><div class="how-icon icon-temp" aria-hidden="true">°</div><h3>Add the temperature</h3><p>Storage temperature helps shape the estimated quality window.</p></article>
+          <article class="how-card"><div class="how-number">03</div><div class="how-icon icon-spark" aria-hidden="true">✳</div><h3>Make a plan</h3><p>Use the estimate as a prompt to prioritize food and reduce avoidable waste.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><a class="brand footer-brand" href="/"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>freshkeep</span></a><p>A little less waste starts with a little more awareness.</p><span class="footer-copy">© 2026 Freshkeep · Prototype</span></footer>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

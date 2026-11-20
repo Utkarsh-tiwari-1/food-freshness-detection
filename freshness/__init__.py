@@ -1,0 +1,1 @@
+"""Food freshness prediction application."""
